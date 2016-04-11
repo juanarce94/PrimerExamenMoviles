@@ -9,18 +9,16 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DataBaseHelper extends SQLiteOpenHelper {
 
-    private  final static String DB_NAME = "avescr";
     private  final static int DB_SCHEME_VERSION = 1;
 
-    public DataBaseHelper(Context context) {
-        super(context,DB_NAME,null,DB_SCHEME_VERSION);
+    public DataBaseHelper(Context context, String dataBaseName) {
+        super(context, dataBaseName ,null,DB_SCHEME_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
-        db.execSQL(AvesDataBaseManager.CREATE_TABLE);
-
+        db.execSQL(DataBaseManager.newAvesTable);
+        db.execSQL(DataBaseManager.newUsersTable);
     }
 
     @Override
