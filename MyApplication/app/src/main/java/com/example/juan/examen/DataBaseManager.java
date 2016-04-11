@@ -2,7 +2,11 @@ package com.example.juan.examen;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
+import java.util.ArrayList;
 
 /**
  * Created by Juan on 4/10/2016.
@@ -46,7 +50,34 @@ public class DataBaseManager {
         dbHelper = new DataBaseHelper(context, name);
         db =  dbHelper.getWritableDatabase();
     }
-    
+
+    public ArrayList<String> getData(String tableName){
+        ArrayList<String> output = new ArrayList<>();
+        String[] columns = new String[] {ID,USER_NAME,USER_PASSWORD};
+        Cursor cursor = db.query(tableName,columns,null,null,null,null,null);
+
+        int iID = cursor.getColumnIndex(ID);
+        int iName = cursor.getColumnIndex(USER_NAME);
+        int iPassword = cursor.getColumnIndex(USER_PASSWORD);
+
+        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+            output.add(cursor.getString(iID) + cursor.getString(iName) + cursor.getString(iPassword));
+        }
+
+        return output;
+    }
+
+    public boolean logRequest(String name, String password){
+
+        String[] columns = new String[] {USER_PASSWORD};
+        Cursor cursor = db.query(USERS_TABLE_NAME, columns, USER_NAME + " = \"" + name + "\"", null, null, null, null);
+
+        if(cursor.getString(0) !=  null)
+            if(password == cursor.getString(0))
+                return true;
+        return false;
+    }
+
     public void insertDB(Object data, String tableName){
         switch (tableName){
             case AVES_TABLE_NAME:
@@ -85,11 +116,11 @@ public class DataBaseManager {
                 AVES_NOMBRE_CIENTIFICO +
                 AVES_DESCRIPCION +
                 AVES_GENERALIDADES +
-                " ) values ( " +
-                ave.nombreComun +
-                ave.nombreCientifico +
-                ave.descripcion +
-                ave.generalidades + " );";
+                " ) values ( \"" +
+                ave.nombreComun + "\" , \"" +
+                ave.nombreCientifico + "\" , \"" +
+                ave.descripcion + "\" , \"" +
+                ave.generalidades + "\" );";
 
         db.execSQL(insertion);
 
@@ -100,11 +131,11 @@ public class DataBaseManager {
     private void updateAves(int id, Ave ave){
 
     String updateSql = "update " + AVES_TABLE_NAME + " set " +
-            AVES_NOMBRE_COMUN + " = " + ave.nombreComun + " , " +
-            AVES_NOMBRE_CIENTIFICO + " = " + ave.nombreCientifico + " , " +
-            AVES_DESCRIPCION + " = " + ave.descripcion + " , " +
-            AVES_GENERALIDADES + " = " + ave.generalidades +
-            " where " + ID + " = " + String.valueOf(id);
+            AVES_NOMBRE_COMUN + " = \"" + ave.nombreComun + "\" , " +
+            AVES_NOMBRE_CIENTIFICO + " = \"" + ave.nombreCientifico + "\" , " +
+            AVES_DESCRIPCION + " = \"" + ave.descripcion + "\" , " +
+            AVES_GENERALIDADES + " = \"" + ave.generalidades +
+            "\" where " + ID + " = \"" + String.valueOf(id) + "\";";
     db.execSQL(updateSql);
 
 
@@ -112,11 +143,11 @@ public class DataBaseManager {
 
     private void insertUsers(User user){
         String insertion = "insert into " + USERS_TABLE_NAME + " (" +
-                USER_NAME +
+                USER_NAME + " , " +
                 USER_PASSWORD +
-                " ) values ( " +
-                user.nombre +
-                user.password + " );";
+                " ) values ( \"" +
+                user.nombre + "\" , \"" +
+                user.password + "\" );";
         db.execSQL(insertion);
     }
     private void deleteUsers(int id){
@@ -124,9 +155,9 @@ public class DataBaseManager {
     }
     private void updateUsers(int id, User user){
         String updateSql = "update " + USERS_TABLE_NAME + " set " +
-                USER_NAME + " = " + user.nombre + " , " +
-                USER_PASSWORD + " = " + user.password +
-                " where " + ID + " = " + String.valueOf(id);
+                USER_NAME + " = \"" + user.nombre + "\" , " +
+                USER_PASSWORD + " = \"" + user.password +
+                "\" where " + ID + " = \"" + String.valueOf(id) + "\";";
         db.execSQL(updateSql);
     }
 }
