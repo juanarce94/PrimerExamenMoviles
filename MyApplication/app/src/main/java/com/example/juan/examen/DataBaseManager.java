@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -49,6 +50,18 @@ public class DataBaseManager {
     public DataBaseManager(Context context, String name) {
         dbHelper = new DataBaseHelper(context, name);
         db =  dbHelper.getWritableDatabase();
+        //context.deleteDatabase("EXAMEN_DATA_BASE");
+    }
+
+    public void deleteTable(String tableName){
+
+        db.execSQL("DELETE FROM " + tableName + " ;");
+
+    }
+    public void dropTable(String tableName){
+
+        db.execSQL("drop table " + tableName + " ;");
+
     }
 
     public ArrayList<String> getData(String tableName){
@@ -61,7 +74,7 @@ public class DataBaseManager {
         int iPassword = cursor.getColumnIndex(USER_PASSWORD);
 
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-            output.add(cursor.getString(iID) + cursor.getString(iName) + cursor.getString(iPassword));
+            output.add(cursor.getString(iID) + " " + cursor.getString(iName) + " " + cursor.getString(iPassword));
         }
 
         return output;
@@ -69,12 +82,18 @@ public class DataBaseManager {
 
     public boolean logRequest(String name, String password){
 
-        String[] columns = new String[] {USER_PASSWORD};
-        Cursor cursor = db.query(USERS_TABLE_NAME, columns, USER_NAME + " = \"" + name + "\"", null, null, null, null);
+        String[] columns = new String[] {ID,USER_NAME,USER_PASSWORD};
+        Cursor cursor = db.query(USERS_TABLE_NAME, columns, null, null, null, null, null);
 
-        if(cursor.getString(0) !=  null)
-            if(password == cursor.getString(0))
-                return true;
+        int iName = cursor.getColumnIndex(USER_NAME);
+        int iPassword = cursor.getColumnIndex(USER_PASSWORD);
+
+        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+
+            if(cursor !=  null)
+                if(name.equals(cursor.getString(iName)) && password.equals(cursor.getString(iPassword)))
+                    return true;
+        }
         return false;
     }
 

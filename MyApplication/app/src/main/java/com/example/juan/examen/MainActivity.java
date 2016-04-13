@@ -1,10 +1,14 @@
 package com.example.juan.examen;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -22,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         dbManager = new DataBaseManager(this, "EXAMEN_DATA_BASE");
 
         //addDefaultUsersToDataBase();
+        //dbManager.deleteTable(DataBaseManager.USERS_TABLE_NAME);
 
         stringArray = dbManager.getData(DataBaseManager.USERS_TABLE_NAME);
 
@@ -29,11 +34,7 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, stringArray);
         listView.setAdapter(adapter);
 
-
-
-
-
-
+        //dbManager.dropTable(DataBaseManager.USERS_TABLE_NAME);
     }
 
 
@@ -44,5 +45,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void logInClicked(View view){
+
+        TextView textViewName = (TextView) findViewById(R.id.editText);
+        TextView textViewPassword = (TextView) findViewById(R.id.editText2);
+
+        String name = textViewName.getText().toString();
+        String password = textViewPassword.getText().toString();
+
+        boolean mayEnter = dbManager.logRequest(name,password);
+
+        if(mayEnter){
+            Intent loggedScreenIntent = new Intent(this,LoggedActivity.class);
+            final int result = 1;
+            startActivityForResult(loggedScreenIntent, result);
+        }
+        else{
+
+            Toast.makeText(this,"Invalid input",Toast.LENGTH_SHORT).show();
+
+        }
+    }
 
 }
