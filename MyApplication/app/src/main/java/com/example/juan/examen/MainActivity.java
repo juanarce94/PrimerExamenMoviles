@@ -67,4 +67,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void singInClicked(View view) {
+
+        Intent singInActivity = new Intent(this,SingInActivity.class);
+        final int result = 1;
+        startActivityForResult(singInActivity, result);
+
+    }
 }

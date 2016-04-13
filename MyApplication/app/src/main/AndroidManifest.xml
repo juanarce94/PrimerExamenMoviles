@@ -20,6 +20,11 @@
             android:label="logged"
             android:theme="@style/AppTheme"/>
 
+        <activity android:name=".SingInActivity"
+            android:label="singIn"
+            android:theme="@style/AppTheme"/>
+
+
     </application>
 
 </manifest>
