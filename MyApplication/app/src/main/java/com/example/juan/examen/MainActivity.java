@@ -16,9 +16,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private DataBaseManager dbManager;
-    private ListView listView;
-    private ArrayList<String> stringArray = new ArrayList<>();
-    private ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,17 +23,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         dbManager = new DataBaseManager(this, "EXAMEN_DATA_BASE");
 
-        //addDefaultUsersToDataBase();
-        //dbManager.deleteTable(DataBaseManager.USERS_TABLE_NAME);
-        addDefaultAvessToDataBase();
+        int num = DataBaseManager.avesDataBase.rawQuery("SELECT " +
+                                                        DataBaseManager.ID +
+                                                        " FROM " +
+                                                        DataBaseManager.AVES_TABLE_NAME, null).getCount();
 
-        stringArray = dbManager.getData(DataBaseManager.USERS_TABLE_NAME);
+        if(num < 1){
+            addDefaultUsersToDataBase();
+            addDefaultAvessToDataBase();
+        }
 
-        listView = (ListView)findViewById(R.id.list);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, stringArray);
-        listView.setAdapter(adapter);
-
-        //dbManager.dropTable(DataBaseManager.AVES_TABLE_NAME);
     }
 
 

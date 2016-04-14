@@ -3,6 +3,7 @@ package com.example.juan.examen;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.widget.Toast;
@@ -35,14 +36,14 @@ public class DataBaseManager {
     public static SQLiteDatabase avesDataBase;
     private DataBaseHelper dbHelper;
 
-    public static String newAvesTable = "create table " + AVES_TABLE_NAME +
+    public static String newAvesTable = "create table if not exists " + AVES_TABLE_NAME +
                 " (" + ID + " integer primary key autoincrement, " +
                 AVES_NOMBRE_COMUN + " text not null, " +
                 AVES_NOMBRE_CIENTIFICO + " text not null, " +
                 AVES_DESCRIPCION + " text not null, " +
                 AVES_GENERALIDADES + " text not null);";
 
-    public static String newUsersTable = "create table " + USERS_TABLE_NAME +
+    public static String newUsersTable = "create table if not exists " + USERS_TABLE_NAME +
                 " (" + ID + " integer primary key autoincrement, " +
                 USER_NAME + " text not null, " +
                 USER_PASSWORD + " text not null);";
@@ -67,7 +68,7 @@ public class DataBaseManager {
     public ArrayList<String> getData(String tableName){
         ArrayList<String> output = new ArrayList<>();
         String[] columns = new String[] {ID,USER_NAME,USER_PASSWORD};
-        Cursor cursor = avesDataBase.query(tableName,columns,null,null,null,null,null);
+        Cursor cursor = avesDataBase.query(tableName, columns,null,null,null,null,null);
 
         int iID = cursor.getColumnIndex(ID);
         int iName = cursor.getColumnIndex(USER_NAME);
@@ -76,6 +77,8 @@ public class DataBaseManager {
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             output.add(cursor.getString(iID) + " " + cursor.getString(iName) + " " + cursor.getString(iPassword));
         }
+
+
 
         return output;
     }
@@ -127,16 +130,7 @@ public class DataBaseManager {
                 return;
         }
     }
-    public static void daleteDB(int id, String tableName){
-        switch (tableName){
-            case AVES_TABLE_NAME:
-                deleteAves(id);
-                return;
-            case USERS_TABLE_NAME:
-                deleteUsers(id);
-                return;
-        }
-    }
+
     public static void updateDB(Object data, int id, String tableName){
         switch (tableName){
             case AVES_TABLE_NAME:
@@ -164,8 +158,8 @@ public class DataBaseManager {
         avesDataBase.execSQL(insertion);
 
     }
-    private static void deleteAves(int id){
-        avesDataBase.delete(AVES_TABLE_NAME, ID + "=?", new String[]{String.valueOf(id)});
+    public static void deleteAves(String id){
+        avesDataBase.delete(AVES_TABLE_NAME, ID + "=?", new String[]{id});
     }
     private static void updateAves(int id, Ave ave){
 
