@@ -5,10 +5,10 @@ package com.example.juan.examen;
  */
 public class Ave {
 
-    public static String nombreComun = "";
-    public static String nombreCientifico = "";
-    public static String descripcion = "";
-    public static String generalidades = "";
+    public String nombreComun = "";
+    public String nombreCientifico = "";
+    public String descripcion = "";
+    public String generalidades = "";
 
     public Ave(String nombreComun,String nombreCientifico,String descripcion,String generalidades) {
         this.nombreComun = nombreComun;

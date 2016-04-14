@@ -68,7 +68,7 @@ public class DataBaseManager {
     public ArrayList<String> getData(String tableName){
         ArrayList<String> output = new ArrayList<>();
         String[] columns = new String[] {ID,USER_NAME,USER_PASSWORD};
-        Cursor cursor = avesDataBase.query(tableName, columns,null,null,null,null,null);
+        Cursor cursor = avesDataBase.query(tableName, columns, null, null, null, null, null);
 
         int iID = cursor.getColumnIndex(ID);
         int iName = cursor.getColumnIndex(USER_NAME);
@@ -77,9 +77,6 @@ public class DataBaseManager {
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             output.add(cursor.getString(iID) + " " + cursor.getString(iName) + " " + cursor.getString(iPassword));
         }
-
-
-
         return output;
     }
     public static ArrayList<String> getAves(){
@@ -102,6 +99,28 @@ public class DataBaseManager {
         }
 
         return output;
+    }
+    public static Ave getAve(String id){
+
+        String[] columns = new String[] {ID,AVES_NOMBRE_COMUN,AVES_NOMBRE_CIENTIFICO,AVES_DESCRIPCION,AVES_GENERALIDADES};
+        Cursor cursor = avesDataBase.query(AVES_TABLE_NAME,columns,null,null,null,null,null);
+
+        int iID = cursor.getColumnIndex(ID);
+        int iNombreCo = cursor.getColumnIndex(AVES_NOMBRE_COMUN);
+        int iNombreCi = cursor.getColumnIndex(AVES_NOMBRE_CIENTIFICO);
+        int iDescripcion = cursor.getColumnIndex(AVES_DESCRIPCION);
+        int iGeneralidades = cursor.getColumnIndex(AVES_GENERALIDADES);
+
+        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+            if(cursor.getString(iID).equals(id)){
+                return  new Ave(cursor.getString(iNombreCo),
+                                 cursor.getString(iNombreCi),
+                                 cursor.getString(iDescripcion),
+                                 cursor.getString(iGeneralidades));
+            }
+        }
+
+        return new Ave("","","","");
     }
     public boolean logRequest(String name, String password){
 
@@ -131,16 +150,7 @@ public class DataBaseManager {
         }
     }
 
-    public static void updateDB(Object data, int id, String tableName){
-        switch (tableName){
-            case AVES_TABLE_NAME:
-                updateAves(id, (Ave) data);
-                return;
-            case USERS_TABLE_NAME:
-                updateUsers(id, (User) data);
-                return;
-        }
-    }
+
 
     private static void insertAves(Ave ave){
 
@@ -161,14 +171,14 @@ public class DataBaseManager {
     public static void deleteAves(String id){
         avesDataBase.delete(AVES_TABLE_NAME, ID + "=?", new String[]{id});
     }
-    private static void updateAves(int id, Ave ave){
+    public static void updateAves(String id, Ave ave){
 
     String updateSql = "update " + AVES_TABLE_NAME + " set " +
             AVES_NOMBRE_COMUN + " = \"" + ave.nombreComun + "\" , " +
             AVES_NOMBRE_CIENTIFICO + " = \"" + ave.nombreCientifico + "\" , " +
             AVES_DESCRIPCION + " = \"" + ave.descripcion + "\" , " +
             AVES_GENERALIDADES + " = \"" + ave.generalidades +
-            "\" where " + ID + " = \"" + String.valueOf(id) + "\";";
+            "\" where " + ID + " = \"" + id + "\";";
     avesDataBase.execSQL(updateSql);
 
 

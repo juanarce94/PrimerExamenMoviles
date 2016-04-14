@@ -19,7 +19,8 @@ public class MainMenu extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         AddAveFragment.OnFragmentInteractionListener,
         ListViewFragment.OnFragmentInteractionListener,
-        DeleteFragment.OnFragmentInteractionListener{
+        DeleteFragment.OnFragmentInteractionListener,
+        UpdateFragment.OnFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +87,8 @@ public class MainMenu extends AppCompatActivity
             Fragment fragment = new DeleteFragment();
             getSupportFragmentManager().beginTransaction().replace(R.id.content_main_menu, fragment).commit();
         } else if (id == R.id.nav_manage) {
-
+            Fragment fragment = new UpdateFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_main_menu, fragment).commit();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
