@@ -71,15 +71,25 @@ public class AddAveFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_ave,container,false);
 
         final Button button = (Button) view.findViewById(R.id.buttonTest);
-        final TextView text = (TextView) (view.findViewById(R.id.textTest));
+        final TextView textNombreCo = (TextView) (view.findViewById(R.id.textTest));
+        final TextView textNombreCi = (TextView) (view.findViewById(R.id.etNombreCi));
+        final TextView textDescripcion = (TextView) (view.findViewById(R.id.etDescripcion));
+        final TextView textGeneralidades = (TextView) (view.findViewById(R.id.etGeneralidades));
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //DataBaseManager.insertDB(new Ave(),DataBaseManager.AVES_TABLE_NAME);
 
-                String s = text.getText().toString();
-                button.setText(s);
+                String nomCo = textNombreCo.getText().toString();
+                String nomCi = textNombreCi.getText().toString();
+                String descripcion = textDescripcion.getText().toString();
+                String generalidades = textGeneralidades.getText().toString();
+
+                Ave newAve = new Ave(nomCo,nomCi,descripcion,generalidades);
+
+                DataBaseManager.insertDB(newAve,DataBaseManager.AVES_TABLE_NAME);
+
+                Toast.makeText(v.getContext(),"Agregado",Toast.LENGTH_SHORT);
             }
 
 

@@ -21,6 +21,7 @@
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Nombre comun"
                 android:id="@+id/textTest" />
         </TableRow>
 
@@ -33,7 +34,8 @@
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText5" />
+                android:text="Nombre cientifico"
+                android:id="@+id/etNombreCi" />
         </TableRow>
 
         <TableRow
@@ -45,7 +47,8 @@
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText6" />
+                android:text="Descripcion"
+                android:id="@+id/etDescripcion" />
         </TableRow>
 
         <TableRow
@@ -57,7 +60,8 @@
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText7" />
+                android:text="Generalidades"
+                android:id="@+id/etGeneralidades" />
         </TableRow>
 
         <TableRow
