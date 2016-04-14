@@ -38,7 +38,7 @@ public class DataBaseManager {
     public static String newAvesTable = "create table " + AVES_TABLE_NAME +
                 " (" + ID + " integer primary key autoincrement, " +
                 AVES_NOMBRE_COMUN + " text not null, " +
-                AVES_NOMBRE_CIENTIFICO + "text not null, " +
+                AVES_NOMBRE_CIENTIFICO + " text not null, " +
                 AVES_DESCRIPCION + " text not null, " +
                 AVES_GENERALIDADES + " text not null);";
 
@@ -79,7 +79,27 @@ public class DataBaseManager {
 
         return output;
     }
+    public static ArrayList<String> getAves(){
+        ArrayList<String> output = new ArrayList<>();
+        String[] columns = new String[] {ID,AVES_NOMBRE_COMUN,AVES_NOMBRE_CIENTIFICO,AVES_DESCRIPCION,AVES_GENERALIDADES};
+        Cursor cursor = avesDataBase.query(AVES_TABLE_NAME,columns,null,null,null,null,null);
 
+        int iID = cursor.getColumnIndex(ID);
+        int iNombreCo = cursor.getColumnIndex(AVES_NOMBRE_COMUN);
+        int iNombreCi = cursor.getColumnIndex(AVES_NOMBRE_CIENTIFICO);
+        int iDescripcion = cursor.getColumnIndex(AVES_DESCRIPCION);
+        int iGeneralidades = cursor.getColumnIndex(AVES_GENERALIDADES);
+
+        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+            output.add(cursor.getString(iID) + " " +
+                       cursor.getString(iNombreCo) + " " +
+                       cursor.getString(iNombreCi) + " " +
+                       cursor.getString(iDescripcion) + " " +
+                       cursor.getString(iGeneralidades));
+        }
+
+        return output;
+    }
     public boolean logRequest(String name, String password){
 
         String[] columns = new String[] {ID,USER_NAME,USER_PASSWORD};
@@ -131,9 +151,9 @@ public class DataBaseManager {
     private static void insertAves(Ave ave){
 
         String insertion = "insert into " + AVES_TABLE_NAME + " (" +
-                AVES_NOMBRE_COMUN +
-                AVES_NOMBRE_CIENTIFICO +
-                AVES_DESCRIPCION +
+                AVES_NOMBRE_COMUN + " , " +
+                AVES_NOMBRE_CIENTIFICO + " , " +
+                AVES_DESCRIPCION + " , " +
                 AVES_GENERALIDADES +
                 " ) values ( \"" +
                 ave.nombreComun + "\" , \"" +

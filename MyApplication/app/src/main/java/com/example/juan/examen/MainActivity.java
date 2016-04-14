@@ -1,5 +1,6 @@
 package com.example.juan.examen;
 
+import android.app.Application;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         //addDefaultUsersToDataBase();
         //dbManager.deleteTable(DataBaseManager.USERS_TABLE_NAME);
+        addDefaultAvessToDataBase();
 
         stringArray = dbManager.getData(DataBaseManager.USERS_TABLE_NAME);
 
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, stringArray);
         listView.setAdapter(adapter);
 
-        //dbManager.dropTable(DataBaseManager.USERS_TABLE_NAME);
+        //dbManager.dropTable(DataBaseManager.AVES_TABLE_NAME);
     }
 
 
@@ -42,6 +44,12 @@ public class MainActivity extends AppCompatActivity {
         for(int i = 0; i < 6; i++){
             User newUser = new User("name"+String.valueOf(i),"pass"+String.valueOf(i));
             dbManager.insertDB(newUser, DataBaseManager.USERS_TABLE_NAME);
+        }
+    }
+    private void addDefaultAvessToDataBase(){
+        for(int i = 0; i < 6; i++){
+            Ave newAve = new Ave("Nombre"+String.valueOf(i),"NombreComun"+String.valueOf(i),"Descripcion"+String.valueOf(i),"Generalidades"+String.valueOf(i));
+            dbManager.insertDB(newAve, DataBaseManager.AVES_TABLE_NAME);
         }
     }
 
@@ -56,14 +64,12 @@ public class MainActivity extends AppCompatActivity {
         boolean mayEnter = dbManager.logRequest(name,password);
 
         if(mayEnter){
-            Intent loggedScreenIntent = new Intent(this,LoggedActivity.class);
+            Intent loggedScreenIntent = new Intent(getApplicationContext(),MainMenu.class);
             final int result = 1;
             startActivityForResult(loggedScreenIntent, result);
         }
         else{
-
             Toast.makeText(this,"Invalid input",Toast.LENGTH_SHORT).show();
-
         }
     }
 
